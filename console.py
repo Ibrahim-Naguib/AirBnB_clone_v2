@@ -127,7 +127,7 @@ class HBNBCommand(cmd.Cmd):
             if isinstance(value, str) and value[0] == '"' and value[-1] == '"':
                 value = value[1:-1].replace("_", " ").replace("\"", "")
             kwarg[key] = value
-        new_instance = HBNBCommand.classes[class_name]()
+        new_instance = HBNBCommand.classes[class_name](**kwarg)
         new_instance.save()
         print(new_instance.id)
 
