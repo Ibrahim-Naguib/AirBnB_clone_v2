@@ -119,7 +119,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         arg_list = args.split()
-        class_name , pair = arg_list[0] , arg_list[1:]
+        class_name, pair = arg_list[0], arg_list[1:]
         kwarg = {}
         for arg in pair:
             key, value = arg.split('=')
@@ -130,7 +130,6 @@ class HBNBCommand(cmd.Cmd):
         new_instance = HBNBCommand.classes[class_name](**kwarg)
         storage.save()
         print(new_instance.id)
-
 
     def help_create(self):
         """ Help information for the create method """
@@ -325,6 +324,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
