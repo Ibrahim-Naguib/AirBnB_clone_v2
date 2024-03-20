@@ -3,7 +3,11 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
+from os import getenv
 import shlex
+import models
+
+storage_type = getenv("HBNB_TYPE_STORAGE")
 
 
 class State(BaseModel, Base):
@@ -11,14 +15,17 @@ class State(BaseModel, Base):
     Attributes:
         name: input name
     """
-    __tablename__ = 'states'
-    name = Column(String(128), nullable=False)
-    cities = relationship('City', cascade='all, delete, delete-orphan',
-                          backref='state')
+    if storage_type == 'db':
+        __tablename__ = 'states'
+        name = Column(String(128), nullable=False)
+        cities = relationship('City', cascade='all, delete, delete-orphan',
+                            backref='state')
+    else:
+        name = ""
 
     @property
     def cities(self):
-        all_objs = storage.all()
+        all_objs = models.storage.all()
         city_list = []
         city_rel = []
         for obj in all_objs:
