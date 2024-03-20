@@ -39,22 +39,23 @@ class DBStorage:
         Args:
             cls: class name
         """
-        dict = {}
-        if cls:
-            if type(cls) is str:
-                cls = eval(cls)
-            query = self.__session
-            for item in query:
-                key = '{}.{}'.format(type(item).__name__, item.id)
-                dict[key] = item
-        else:
-            classes = [State, City, User, Place, Review, Amenity]
-            for clss in classes:
-                query = self.__session.query(clss)
-                for item in query:
-                    key = '{}.{}'.format(type(item).__name__, item.id)
-                    dict[key] = item
-        return (dict)
+        all_classes = {
+            "State": State,
+            "City": City,
+            "User": User,
+            "Place": Place,
+            "Review": Review,
+            "Amenity": Amenity,
+        }
+        new_dict = {}
+        for clss in all_classes:
+            if cls is None or cls is all_classes[clss] or cls is clss:
+                objs = self.__session.query(all_classes[clss]).all()
+                for obj in objs:
+                    key = obj.__class__.__name__ + '.' + obj.id
+                    new_dict[key] = obj
+
+        return new_dict
 
     def new(self, obj):
         """Adds the object to the current database session
