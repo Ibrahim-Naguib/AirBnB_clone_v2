@@ -4,7 +4,7 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 from os import getenv
-import shlex
+from models.city import City
 import models
 
 storage_type = getenv("HBNB_TYPE_STORAGE")
@@ -25,16 +25,9 @@ class State(BaseModel, Base):
 
     @property
     def cities(self):
-        all_objs = models.storage.all()
-        city_list = []
-        city_rel = []
-        for obj in all_objs:
-            city = obj.replace('.', ' ')
-            city = shlex.split(city)
-            if city[0] == 'City':
-                city_list.append(city_list[obj])
-
-        for city in city_list:
+        """returns the list of City instances with state_id"""
+        state_cities = []
+        for city in models.storage.all(City).values():
             if city.state_id == self.id:
-                city_rel.append(city)
-        return city_rel
+                state_cities.append(city)
+        return state_cities

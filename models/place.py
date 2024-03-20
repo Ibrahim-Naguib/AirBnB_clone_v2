@@ -3,9 +3,10 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
-import shlex
+import models
 from os import getenv
 from models.amenity import Amenity
+from models.review import Review
 
 
 place_amenity = Table('place_amenity', Base.metadata,
@@ -54,19 +55,8 @@ class Place(BaseModel, Base):
         @property
         def reviews(self):
             """returns a list of Review instances"""
-            all_objs = storage.all()
-            reviews_list = []
-            reviews_rel = []
-            for obj in all_objs:
-                city = obj.replace('.', ' ')
-                city = shlex.split(city)
-                if city[0] == 'City':
-                    reviews_list.append(reviews_list[obj])
-
-            for city in reviews_list:
-                if city.state_id == self.id:
-                    reviews_rel.append(city)
-            return reviews_rel
+            return [review for review in models.storage.all(Review).values()
+                    if review.place_id == self.id]
 
         @property
         def amenities(self):
