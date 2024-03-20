@@ -116,9 +116,8 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, args):
         """ Create an object of any class"""
         if not args:
-            print("** class name missing **")
-            return
-        arg_list = args.split()
+            raise SyntaxError()
+        arg_list = args.split(" ")
         class_name, pair = arg_list[0], arg_list[1:]
         kwarg = {}
         for arg in pair:
@@ -128,7 +127,7 @@ class HBNBCommand(cmd.Cmd):
                 value = value.replace("_", " ").replace('"', '\\"')
             kwarg[key] = value
         new_instance = HBNBCommand.classes[class_name](**kwarg)
-        storage.save()
+        new_instance.save()
         print(new_instance.id)
 
     def help_create(self):
