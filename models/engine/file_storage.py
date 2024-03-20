@@ -5,12 +5,19 @@ import shlex
 
 
 class FileStorage:
-    """This class manages storage of hbnb models in JSON format"""
+    """This class manages storage of hbnb models in JSON format
+    Attributes:
+        __file_path: path to the JSON file
+        __objects: objects will be stored
+    """
     __file_path = 'file.json'
     __objects = {}
 
     def all(self, cls=None):
-        """Returns a dictionary of models currently in storage"""
+        """Returns a dictionary of models currently in storage
+        Args:
+            cls: class name
+        """
         dict = {}
         if cls:
             dictionary = self.__objects
@@ -24,7 +31,10 @@ class FileStorage:
             return FileStorage.__objects
 
     def new(self, obj):
-        """Adds new object to storage dictionary"""
+        """Adds new object to storage dictionary
+        Args:
+            obj: instance object
+        """
         self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
 
     def save(self):
@@ -61,7 +71,10 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
-        """ delete an existing element from __objects"""
+        """ delete an existing element from __objects
+        Args:
+            obj: object
+        """
         if obj:
             key = "{}.{}".format(obj.__class__.__name__, obj.id)
             del self.__objects[key]

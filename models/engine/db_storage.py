@@ -10,15 +10,19 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-from sqlalchemy.ext.declarative import declarative_base
 
 
 class DBStorage:
-    """This class manages Database storage"""
+    """This class manages Database storage
+    Attributes:
+        __engine: engine
+        __session: session
+    """
     __engine = None
     __session = None
 
     def __init__(self):
+        """Instantiate a new model"""
         user = getenv('HBNB_MYSQL_USER')
         password = getenv('HBNB_MYSQL_PWD')
         host = getenv('HBNB_MYSQL_HOST')
@@ -31,7 +35,10 @@ class DBStorage:
             Base.metadata.drop_all(self.engine)
 
     def all(self, cls=None):
-        """Returns a dictionary of models currently in Database"""
+        """Returns a dictionary of models currently in Database
+        Args:
+            cls: class name
+        """
         dict = {}
         if cls:
             if type(cls) is str:
@@ -50,7 +57,10 @@ class DBStorage:
         return (dict)
 
     def new(self, obj):
-        """Adds the object to the current database session"""
+        """Adds the object to the current database session
+        Args:
+            obj: instance object
+        """
         self.__session.add(obj)
 
     def save(self):
@@ -58,7 +68,10 @@ class DBStorage:
         self.__session.commit()
 
     def delete(self, obj=None):
-        """Deletes from the current database session"""
+        """Deletes from the current database session
+        Args:
+            obj: instance object
+        """
         if obj:
             self.__session.delete(obj)
 

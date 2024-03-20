@@ -10,13 +10,22 @@ Base = declarative_base()
 
 
 class BaseModel:
-    """A base class for all hbnb models"""
+    """A base class for all hbnb models
+    Attributes:
+        id (sqlalchemy.String): The BaseModel's id
+        created_at (sqlalchemy.DateTime): The BaseModel's created_at
+        updated_at (sqlalchemy.DateTime): The BaseModel's updated_at
+    """
     id = Column(String(60), unique=True, nullable=False, primary_key=True)
     created_at = Column(DateTime, nullable=False, default=(datetime.utcnow()))
     updated_at = Column(DateTime, nullable=False, default=(datetime.utcnow()))
 
     def __init__(self, *args, **kwargs):
-        """Instatntiates a new model"""
+        """Instatntiates a new model
+        Args:
+            args: it won't be used
+            kwargs: arguments for the constructor of the BaseModel
+        """
         if kwargs:
             for key, value in kwargs.items():
                 if key == "created_at" or key == "updated_at":
@@ -59,4 +68,4 @@ class BaseModel:
 
     def delete(self):
         """Deletes the current instance"""
-        storage.delete(self)
+        models.storage.delete(self)

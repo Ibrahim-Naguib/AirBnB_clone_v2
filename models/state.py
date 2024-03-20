@@ -8,7 +8,10 @@ import shlex
 
 
 class State(BaseModel, Base):
-    """ State class """
+    """ State class to store state information
+    Attributes:
+        name: input name
+    """
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
     cities = relationship('City', cascade='all, delete, delete-orphan',
