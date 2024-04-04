@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 # Script that sets up the web servers for the deployment of web_static
 
-apt-get update
-apt-get -y install nginx
+sudo apt-get update
+sudo apt-get -y install nginx
 
-mkdir -p /data/web_static/shared/
-mkdir -p /data/web_static/releases/test/
-echo 'Hello World!' > /data/web_static/releases/test/index.html
+sudo mkdir -p /data/web_static/shared/
+sudo mkdir -p /data/web_static/releases/test/
+echo 'Hello World!' | sudo tee /data/web_static/releases/test/index.html >/dev/null
 
-ln -sf /data/web_static/releases/test/ /data/web_static/current
+sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
-chown -R ubuntu:ubuntu /data/
+sudo chown -R ubuntu:ubuntu /data/
 
 printf %s "server {
     listen 80 default_server;
@@ -30,6 +30,6 @@ printf %s "server {
       root /var/www/html;
       internal;
     }
-}" > /etc/nginx/sites-available/default
+}" | sudo tee /etc/nginx/sites-available/default >/dev/null
 
-service nginx restart
+sudo service nginx restart
