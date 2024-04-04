@@ -6,7 +6,9 @@ from fabric.api import local
 from datetime import datetime
 import os
 
+
 def do_pack():
+    """Generates a .tgz archive"""
     if not os.path.isdir('versions'):
         os.mkdir('versions')
 
