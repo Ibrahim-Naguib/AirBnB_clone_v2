@@ -6,7 +6,7 @@ sudo apt-get -y install nginx
 
 sudo mkdir -p /data/web_static/shared/
 sudo mkdir -p /data/web_static/releases/test/
-echo 'Hello World!' | sudo tee /data/web_static/releases/test/index.html >/dev/null
+echo 'Holberton School' | sudo tee /data/web_static/releases/test/index.html >/dev/null
 
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
@@ -15,7 +15,7 @@ sudo chown -R ubuntu:ubuntu /data/
 printf %s "server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    add_header X-Served-By $hostname;
+    add_header X-Served-By $HOSTNAME;
     root   /var/www/html;
     index  index.html index.htm;
     location /hbnb_static {
