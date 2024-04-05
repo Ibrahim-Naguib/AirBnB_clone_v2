@@ -27,16 +27,17 @@ def do_deploy(archive_path):
     if os.path.exists(archive_path) is False:
         return False
     try:
-        new_name = '/data/web_static/releases/{}/'.format(archive_path[9:-4])
+        old_name = archive_path.split("/")[-1]
+        new_name = old_name.split(".")[0]
+        path = "/data/web_static/releases/"
         put(archive_path, '/tmp/')
-        run('sudo mkdir -p {}'.format(new_name))
-        run('sudo tar -xzf /tmp/{} -C {}'.format(archive_path[9:], new_name))
-        run('sudo rm /tmp/{}'.format(archive_path[9:]))
-        run('sudo mv {}/web_static/* {}'.format(new_name, new_name))
-        run('sudo rm -rf {}/web_static'.format(new_name))
+        run('sudo mkdir -p {}{}'.format(path, new_name))
+        run('sudo tar -xzf /tmp/{} -C {}{}'.format(old_name, path, new_name))
+        run('sudo rm /tmp/{}'.format(old_name))
+        run('sudo mv {0}{1}/web_static/* {0}{1}'.format(path, new_name))
+        run('sudo rm -rf {}{}/web_static'.format(path, new_name))
         run('sudo rm -rf /data/web_static/current')
-        run('sudo ln -s {} /data/web_static/current'.format(new_name))
-        print("New version deployed!")
+        run('sudo ln -s {}{} /data/web_static/current'.format(path, new_name))
         return True
     except:
         return False
