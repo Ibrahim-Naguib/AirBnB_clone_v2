@@ -19,12 +19,13 @@ def do_pack():
 
     try:
         print('Packing web_static to {}'.format(file_name))
-        local('tar -cvzf {} web_static'.format(file_name))
+        if os.path.exists(file_name) is False:
+            local('tar -cvzf {} web_static'.format(file_name))
         file_size = os.path.getsize(file_name)
         print('web_static packed: {} -> {}Bytes'.format(file_name, file_size))
+        return file_name
     except Exception:
-        file_name = None
-    return file_name
+        return None
 
 
 def do_deploy(archive_path):
