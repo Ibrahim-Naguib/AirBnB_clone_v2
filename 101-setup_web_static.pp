@@ -4,8 +4,8 @@ package { 'nginx':
 }
 
 exec { 'install_nginx':
-  command  => 'sudo apt-get update ; sudo apt-get -y install nginx',
-  path     => '/usr/bin:/bin',
+  command => 'sudo apt-get update ; sudo apt-get -y install nginx',
+  path    => '/usr/bin:/bin',
 }
 
 file { '/data/web_static/shared/':
@@ -18,7 +18,14 @@ file { '/data/web_static/releases/test/':
 
 file { '/data/web_static/releases/test/index.html':
   ensure  => present,
-  content => 'Holberton School',
+  content => '<html>
+  <head>
+  </head>
+  <body>
+    Holberton School
+  </body>
+</html>
+',
 }
 
 file { '/data/web_static/current':
@@ -32,7 +39,7 @@ exec { 'sudo chown -R ubuntu:ubuntu /data/':
 
 exec { 'echo':
   path    => '/usr/bin:/bin',
-  command => 'echo "server { listen 80; listen [::]:80 default_server; add_header X-Served-By ${HOSTNAME}; root /var/www/html; index index.html index.htm index.nginx-debian.html; server_name _; location /hbnb_static { alias /data/web_static/current; index index.html index.htm; } location /redirect_me { return 301  https://www.youtube.com/watch?v=QH2-TGUlwu4; } error_page 404 /404.html; location /404.html { root /var/www/html; internal; } }" | sudo tee /etc/nginx/sites-available/default'
+  command => "echo 'server { listen 80; listen [::]:80 default_server; add_header X-Served-By ${HOSTNAME}; root /var/www/html; index index.html index.htm index.nginx-debian.html; server_name _; location /hbnb_static { alias /data/web_static/current; index index.html index.htm; } location /redirect_me { return 301  https://www.youtube.com/watch?v=QH2-TGUlwu4; } error_page 404 /404.html; location /404.html { root /var/www/html; internal; } }' | sudo tee /etc/nginx/sites-available/default"
 }
 
 service { 'nginx':
