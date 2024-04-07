@@ -1,4 +1,4 @@
-# Install Nginx
+# script that sets up the web servers for the deployment of web_static
 package { 'nginx':
   ensure  => installed,
 }
