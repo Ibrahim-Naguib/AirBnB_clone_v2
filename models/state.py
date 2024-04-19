@@ -15,16 +15,24 @@ class State(BaseModel, Base):
     Attributes:
         name: input name
     """
-    __tablename__ = 'states'
-    name = Column(String(128), nullable=False)
-    cities = relationship('City', cascade='all, delete, delete-orphan',
-                          backref='state')
+    if storage_type == 'db':
+        __tablename__ = 'states'
+        name = Column(String(128), nullable=False)
+        cities = relationship('City', cascade='all, delete, delete-orphan',
+                              backref='state')
+	else:
+        name = ""
 
-    @property
-    def cities(self):
-        """returns the list of City instances with state_id"""
-        state_cities = []
-        for city in models.storage.all(City).values():
-            if city.state_id == self.id:
-                state_cities.append(city)
-        return state_cities
+    def __init__(self, *args, **kwargs):
+        """initializes state"""
+        super().__init__(*args, **kwargs)
+
+    if storage_type != 'db':
+        @property
+        def cities(self):
+            """returns the list of City instances with state_id"""
+            state_cities = []
+            for city in models.storage.all(City).values():
+                if city.state_id == self.id:
+                    state_cities.append(city)
+            return state_cities
