@@ -12,11 +12,11 @@ app.jinja_env.lstrip_blocks = True
 @app.route("/states_list", strict_slashes=False)
 def states_list():
     states = storage.all("State")
-    return render_template("6-number_odd_or_even.html", states=states)
+    return render_template("7-states_list.html", states=states)
 
 
 @app.teardown_appcontext
-def teardown():
+def teardown(exc):
     storage.close()
 
 
