@@ -1,15 +1,18 @@
 #!/usr/bin/python3
 """This module defines a class to manage Database storage for hbnb clone"""
 from os import getenv
-from sqlalchemy import create_engine
 from models.base_model import Base
-from sqlalchemy.orm import sessionmaker, scoped_session
-from models.user import User
-from models.place import Place
-from models.state import State
-from models.city import City
+from models.base_model import BaseModel
 from models.amenity import Amenity
+from models.city import City
+from models.place import Place
 from models.review import Review
+from models.state import State
+from models.user import User
+from sqlalchemy import create_engine
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import scoped_session
+from sqlalchemy.orm import sessionmaker
 
 
 class DBStorage:
@@ -32,30 +35,25 @@ class DBStorage:
                                       .format(user, password, host, database),
                                       pool_pre_ping=True)
         if env == 'test':
-            Base.metadata.drop_all(self.engine)
+            Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in Database
         Args:
             cls: class name
         """
-        all_classes = {
-            "State": State,
-            "City": City,
-            "User": User,
-            "Place": Place,
-            "Review": Review,
-            "Amenity": Amenity,
-        }
-        new_dict = {}
-        for clss in all_classes:
-            if cls is None or cls is all_classes[clss] or cls is clss:
-                objs = self.__session.query(all_classes[clss]).all()
-                for obj in objs:
-                    key = obj.__class__.__name__ + '.' + obj.id
-                    new_dict[key] = obj
-
-        return new_dict
+        if cls is None:
+            objs = self.__session.query(State).all()
+            objs.extend(self.__session.query(City).all())
+            objs.extend(self.__session.query(User).all())
+            objs.extend(self.__session.query(Place).all())
+            objs.extend(self.__session.query(Review).all())
+            objs.extend(self.__session.query(Amenity).all())
+        else:
+            if type(cls) == str:
+                cls = eval(cls)
+            objs = self.__session.query(cls)
+        return {"{}.{}".format(type(o).__name__, o.id): o for o in objs}
 
     def new(self, obj):
         """Adds the object to the current database session
@@ -73,7 +71,7 @@ class DBStorage:
         Args:
             obj: instance object
         """
-        if obj:
+        if obj is not None:
             self.__session.delete(obj)
 
     def reload(self):

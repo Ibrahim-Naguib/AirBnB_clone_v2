@@ -1,14 +1,13 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
 import json
-import shlex
 from models.base_model import BaseModel
-from models.user import User
-from models.place import Place
-from models.state import State
-from models.city import City
 from models.amenity import Amenity
+from models.city import City
+from models.place import Place
 from models.review import Review
+from models.state import State
+from models.user import User
 
 
 class FileStorage:
@@ -25,15 +24,15 @@ class FileStorage:
         Args:
             cls: class name
         """
-        if cls is None:
-            return self.__objects
-        else:
-            className = cls if isinstance(cls, str) else cls.__name__
-            result_all = {}
-            for key, value in self.__objects.items():
-                if key.split('.')[0] == className:
-                    result_all[key] = value
-            return result_all
+        if cls is not None:
+            if type(cls) == str:
+                cls = eval(cls)
+            cls_dict = {}
+            for k, v in self.__objects.items():
+                if type(v) == cls:
+                    cls_dict[k] = v
+            return cls_dict
+        return self.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary
