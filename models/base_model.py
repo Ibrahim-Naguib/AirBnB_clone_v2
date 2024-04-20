@@ -7,7 +7,12 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, String, DateTime
 
 
-Base = declarative_base()
+CustomBase = declarative_base()
+
+class Base(CustomBase):
+    """Custom Base class for SQLAlchemy models"""
+    __abstract__ = True
+    __table_args__ = {'mysql_charset': 'latin1', 'mysql_collate': 'latin1_swedish_ci'}
 
 
 class BaseModel:

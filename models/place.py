@@ -16,7 +16,9 @@ place_amenity = Table("place_amenity", Base.metadata,
                       Column("amenity_id", String(60),
                              ForeignKey("amenities.id"),
                              primary_key=True,
-                             nullable=False))
+                             nullable=False),
+                             mysql_charset='latin1',
+                             mysql_collate='latin1_swedish_ci')
 
 
 class Place(BaseModel, Base):
